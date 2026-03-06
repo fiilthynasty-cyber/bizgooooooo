@@ -1,5 +1,9 @@
 {
   "name": "lead-scoring-pipeline",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "scripts": {
+    "build": "node --check backend/index.js",
+    "start": "node backend/index.js"
+  }
 }
