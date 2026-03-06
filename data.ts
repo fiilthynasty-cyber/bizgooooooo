@@ -1,44 +1,136 @@
-    signals: [
-      { type: "Email", description: "Opened 1 email", weight: 3, timestamp: "5d ago" },
-    ],
-    tags: ["tech", "startup"],
-  },
+export type IntentLevel = "hot" | "warm" | "cool" | "cold";
+export type LeadStatus = "new" | "contacted" | "qualified" | "proposal" | "won" | "lost";
+export type LeadSource = "organic" | "paid" | "referral" | "social" | "email";
+
+export interface LeadSignal {
+  type: string;
+  description: string;
+  weight: number;
+  timestamp: string;
+}
+
+export interface Lead {
+  id: string;
+  name: string;
+  email: string;
+  company: string;
+  title: string;
+  intentScore: number;
+  intentLevel: IntentLevel;
+  status: LeadStatus;
+  source: LeadSource;
+  lastActivity: string;
+  createdAt: string;
+  signals: LeadSignal[];
+  tags: string[];
+}
+
+export interface Subscriber {
+  id: string;
+  email: string;
+  name: string;
+  source: LeadSource;
+  status: "active" | "unsubscribed" | "bounced";
+  subscribedAt: string;
+  leadScore: number;
+  engagementRate: number;
+}
+
+export const leads: Lead[] = [
   {
-    id: "L007",
-    name: "Lisa Nakamura",
-    email: "l.nakamura@bigco.jp",
-    company: "BigCo Japan",
-    title: "VP Engineering",
-    intentScore: 88,
+    id: "L001",
+    name: "Sarah Chen",
+    email: "sarah.chen@techcorp.io",
+    company: "TechCorp",
+    title: "Head of Growth",
+    intentScore: 92,
     intentLevel: "hot",
-    status: "qualified",
-    source: "referral",
-    lastActivity: "30 min ago",
-    createdAt: "2026-02-08",
+    status: "won",
+    source: "organic",
+    lastActivity: "10 min ago",
+    createdAt: "2026-01-15",
     signals: [
-      { type: "Demo", description: "Completed product trial", weight: 35, timestamp: "30m ago" },
-      { type: "Page Visit", description: "Viewed API docs extensively", weight: 20, timestamp: "1d ago" },
-      { type: "Content", description: "Downloaded integration guide", weight: 15, timestamp: "2d ago" },
+      { type: "Demo", description: "Booked and attended demo", weight: 35, timestamp: "10m ago" },
+      { type: "Email", description: "Replied to pricing email", weight: 20, timestamp: "1h ago" },
     ],
-    tags: ["enterprise", "international", "technical"],
+    tags: ["enterprise", "high-intent"],
   },
   {
-    id: "L008",
-    name: "Carlos Mendez",
-    email: "carlos@latamgrowth.co",
-    company: "LATAM Growth",
-    title: "Marketing Director",
-    intentScore: 56,
-    intentLevel: "cool",
-    status: "contacted",
-    source: "paid",
-    lastActivity: "4 days ago",
-    createdAt: "2026-02-22",
+    id: "L002",
+    name: "Marcus Johnson",
+    email: "m.johnson@growthly.com",
+    company: "Growthly",
+    title: "Revenue Ops Manager",
+    intentScore: 85,
+    intentLevel: "hot",
+    status: "proposal",
+    source: "referral",
+    lastActivity: "3h ago",
+    createdAt: "2026-01-20",
     signals: [
-      { type: "Page Visit", description: "Visited homepage twice", weight: 5, timestamp: "4d ago" },
-      { type: "Content", description: "Read comparison article", weight: 10, timestamp: "5d ago" },
+      { type: "Page Visit", description: "Visited pricing 4 times", weight: 18, timestamp: "3h ago" },
     ],
-    tags: ["mid-market", "international"],
+    tags: ["mid-market"],
+  },
+  {
+    id: "L003",
+    name: "Elena Rodriguez",
+    email: "elena@startupx.co",
+    company: "StartupX",
+    title: "Founder",
+    intentScore: 74,
+    intentLevel: "warm",
+    status: "qualified",
+    source: "paid",
+    lastActivity: "1d ago",
+    createdAt: "2026-02-01",
+    signals: [{ type: "Content", description: "Downloaded buyer guide", weight: 12, timestamp: "1d ago" }],
+    tags: ["startup"],
+  },
+  {
+    id: "L004",
+    name: "David Kim",
+    email: "d.kim@enterprise.co",
+    company: "Enterprise Co",
+    title: "VP Sales",
+    intentScore: 61,
+    intentLevel: "warm",
+    status: "contacted",
+    source: "organic",
+    lastActivity: "2d ago",
+    createdAt: "2026-02-05",
+    signals: [{ type: "Email", description: "Opened outreach sequence", weight: 8, timestamp: "2d ago" }],
+    tags: ["enterprise"],
+  },
+  {
+    id: "L005",
+    name: "Amira Patel",
+    email: "amira@digitalfirst.io",
+    company: "DigitalFirst",
+    title: "Marketing Lead",
+    intentScore: 48,
+    intentLevel: "cool",
+    status: "new",
+    source: "social",
+    lastActivity: "4d ago",
+    createdAt: "2026-02-10",
+    signals: [{ type: "Page Visit", description: "Viewed homepage", weight: 4, timestamp: "4d ago" }],
+    tags: ["smb"],
+  },
+  {
+    id: "L006",
+    name: "James Wright",
+    email: "j.wright@scaleup.com",
+    company: "ScaleUp",
+    title: "CEO",
+    intentScore: 33,
+    intentLevel: "cold",
+    status: "lost",
+    source: "email",
+    lastActivity: "5d ago",
+    createdAt: "2026-01-25",
+    signals: [{ type: "Email", description: "Opened 1 email", weight: 3, timestamp: "5d ago" }],
+    tags: ["tech", "startup"],
   },
 ];
 
@@ -53,33 +145,6 @@ export const subscribers: Subscriber[] = [
   { id: "S008", email: "carlos@latamgrowth.co", name: "Carlos Mendez", source: "paid", status: "active", subscribedAt: "2026-02-15", leadScore: 56, engagementRate: 38 },
   { id: "S009", email: "info@bounced.com", name: "Test Bounce", source: "email", status: "bounced", subscribedAt: "2026-02-20", leadScore: 0, engagementRate: 0 },
   { id: "S010", email: "alex@newco.io", name: "Alex Turner", source: "organic", status: "active", subscribedAt: "2026-03-01", leadScore: 42, engagementRate: 35 },
-];
-
-export const weeklyLeadData = [
-  { day: "Mon", leads: 42, qualified: 18, converted: 8 },
-  { day: "Tue", leads: 56, qualified: 24, converted: 11 },
-  { day: "Wed", leads: 38, qualified: 15, converted: 6 },
-  { day: "Thu", leads: 67, qualified: 31, converted: 14 },
-  { day: "Fri", leads: 52, qualified: 22, converted: 10 },
-  { day: "Sat", leads: 23, qualified: 9, converted: 4 },
-  { day: "Sun", leads: 18, qualified: 7, converted: 3 },
-];
-
-export const monthlyTrendData = [
-  { month: "Sep", leads: 1820, subscribers: 9200, score: 58 },
-  { month: "Oct", leads: 2100, subscribers: 10400, score: 61 },
-  { month: "Nov", leads: 1950, subscribers: 11100, score: 63 },
-  { month: "Dec", leads: 2340, subscribers: 12300, score: 65 },
-  { month: "Jan", leads: 2580, subscribers: 13100, score: 66 },
-  { month: "Feb", leads: 2847, subscribers: 14392, score: 68 },
-];
-
-export const sourceBreakdown = [
-  { source: "Organic", count: 1024, percentage: 36, color: "#7C9A82" },
-  { source: "Paid", count: 712, percentage: 25, color: "#C4704B" },
-  { source: "Referral", count: 542, percentage: 19, color: "#B8A089" },
-  { source: "Social", count: 341, percentage: 12, color: "#2C1810" },
-  { source: "Email", count: 228, percentage: 8, color: "#5A8A64" },
 ];
 
 export function getIntentColor(level: IntentLevel): string {
